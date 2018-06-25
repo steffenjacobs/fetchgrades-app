@@ -40,19 +40,19 @@ public class FullTableGenerator {
     }
 
     private static TableLayout createTableLayout(String[] columnHeaders, List<Module> modules, Context context) {
-        // 1) Create a tableLayout and its params
-        TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
+
+        //create table layout
         TableLayout tableLayout = new TableLayout(context);
-        tableLayout.setStretchAllColumns(true);
-        //tableLayout.setShrinkAllColumns(true);
-
         tableLayout.setBackgroundColor(Color.WHITE);
+        tableLayout.setStretchAllColumns(true);
 
-        // 2) create tableRow params
+        //create table parameters
+        TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
         tableRowParams.setMargins(1, 1, 1, 1);
         tableRowParams.weight = 1;
 
+        //create header
         TableRow headersRow = new TableRow(context);
         headersRow.setBackgroundColor(Color.BLACK);
         for (String s : columnHeaders) {
@@ -62,6 +62,7 @@ public class FullTableGenerator {
         }
         tableLayout.addView(headersRow, tableLayoutParams);
 
+        //create table
         for (int i = 0; i < modules.size(); i++) {
             Module m = modules.get(i);
             TableRow tableRow = new TableRow(context);

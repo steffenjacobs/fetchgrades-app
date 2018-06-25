@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToNextActivity() {
 
-        if(((CheckBox)findViewById(R.id.checkbox_save_login)).isChecked()){
+        if (((CheckBox) findViewById(R.id.checkbox_save_login)).isChecked()) {
             credentialStorageService.saveCredentials(this, mEmailView.getText().toString(), mPasswordView.getText().toString());
         }
 
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
         FetchGrades grades = new FetchGrades(mEmailView.getText().toString(), mPasswordView.getText().toString());
         try {
-            if(!grades.hasGrades()){
+            if (!grades.hasGrades()) {
                 mEmailView.setError("Username or Password is incorrect or no grades available.");
                 mPasswordView.setError("Username or Password is incorrect or no grades available.");
                 return;

@@ -95,8 +95,8 @@ public class AuthenticatorService {
         return "";
     }
 
-    private RSAPrivateKey toPrivateKey(final PrivateKey privateKey){
-        final RSAKey key = (RSAKey)privateKey;
+    private RSAPrivateKey toPrivateKey(final PrivateKey privateKey) {
+        final RSAKey key = (RSAKey) privateKey;
        /* try {
             Class clazz = privateKey;
             Field f = clazz.getField("mModulus");
