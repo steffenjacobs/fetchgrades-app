@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -22,12 +23,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.xml.transform.sax.SAXSource;
 
 import me.steffenjacobs.fetchgrades.gradedisplay.GradeDisplayActivity;
 import me.steffenjacobs.fetchgrades.R;
+import me.steffenjacobs.fetchgrades.gradefetcher.FetchGrades;
 
 /**
  * A login screen that offers login via email/password.
@@ -98,6 +101,25 @@ public class LoginActivity extends AppCompatActivity {
         String plain_back = authenticatorService.decryptString(cipher);
         System.out.println("Plain-Back: " + plain_back);*/
 
+        //enable network activity in main thread
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
+        FetchGrades grades = new FetchGrades(mEmailView.getText().toString(), mPasswordView.getText().toString());
+        try {
+            if(!grades.hasGrades()){
+                mEmailView.setError("Username or Password is incorrect or no grades available.");
+                mPasswordView.setError("Username or Password is incorrect or no grades available.");
+                return;
+            }
+        } catch (IOException e) {
+            mEmailView.setError("Portal 2 service is currently unavailable.");
+            mPasswordView.setError("Portal 2 service is currently unavailable.");
+            e.printStackTrace();
+            return;
+        }
 
         Intent intent = new Intent(LoginActivity.this, GradeDisplayActivity.class);
 

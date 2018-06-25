@@ -45,13 +45,20 @@ public class Parser {
 		return null;
 	}
 
+	public static boolean hasGrades(String html){
+		ArrayList<Element[]> list = new ArrayList<>();
+		Document doc = Jsoup.parse(html);
+		ArrayList<Element> elems = doc.getElementsByAttributeValue("class", "posrecords");
+		return elems.size()>0;
+	}
+
 	public static List<Module> parseGrades(String html) {
 		ArrayList<Element[]> list = new ArrayList<>();
 		Document doc = Jsoup.parse(html);
-		ArrayList<Element> lol = doc.getElementsByAttributeValue("class", "posrecords");
+		ArrayList<Element> elems = doc.getElementsByAttributeValue("class", "posrecords");
 		int i = 0;
 		Element[] inner = new Element[11];
-		for (Iterator<Element> iterator = lol.iterator(); iterator.hasNext(); i++) {
+		for (Iterator<Element> iterator = elems.iterator(); iterator.hasNext(); i++) {
 			Element element = iterator.next();
 			inner[i] = element;
 			if (i == 10) {

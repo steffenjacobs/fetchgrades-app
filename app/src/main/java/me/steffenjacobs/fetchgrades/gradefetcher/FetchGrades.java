@@ -49,7 +49,7 @@ public class FetchGrades {
 		this.password = password;
 	}
 
-	public void fetchCookie() throws IOException {
+	private void fetchCookie() throws IOException {
 		httpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(Constants.URL_ILIAS);
 		CloseableHttpResponse response = httpClient.execute(httpGet);
@@ -67,7 +67,7 @@ public class FetchGrades {
 		this.lt = (Parser.parseLT(html));
 	}
 
-	public void performLogin() throws IOException {
+	private void performLogin() throws IOException {
 		HttpPost httppost = new HttpPost(Constants.URL_ILIAS);
 		httppost.setHeader("Cookie", this.cookie);
 		List<NameValuePair> params = new ArrayList<>();
@@ -81,14 +81,14 @@ public class FetchGrades {
 		httpClient.execute(httppost);
 	}
 
-	public String fetchPruefungenNotenspiegel() throws IOException {
+	private String fetchPruefungenNotenspiegel() throws IOException {
 		HttpGet httpget = new HttpGet(Constants.URL_PORTAL2_GRADES);
 		httpget.setHeader("Cookie", this.cookie);
 		CloseableHttpResponse response = httpClient.execute(httpget);
 		return EntityUtils.toString(response.getEntity());
 	}
 
-	public String fetchNotenPage(String html) throws IOException {
+	private String fetchNotenPage(String html) throws IOException {
 		String asiUrl = Parser.parseASIURL(html);
 		HttpGet httpget = new HttpGet(asiUrl);
 		httpget.setHeader("Cookie", this.cookie);
@@ -96,7 +96,7 @@ public class FetchGrades {
 		return EntityUtils.toString(response.getEntity());
 	}
 
-	public void performLogout() throws IOException {
+	private void performLogout() throws IOException {
 		HttpGet httpget = new HttpGet(Constants.URL_LOGOUT);
 		httpget.setHeader("Cookie", this.cookie);
 		httpClient.execute(httpget);
@@ -114,17 +114,11 @@ public class FetchGrades {
 		return Parser.parseGrades(htmlPage);
 	}
 
-	public static void main(String[] args) {
-		try {
-			if (args.length >= 2) {
-				List<Module> list = new FetchGrades(args[0], args[1]).fetchGrades();
-				System.out.println(list.toString());
-				System.out.println("Average: " + GradeCalculator.calculateAverage(list));
-				new StorageService().store(list, "C:/Temp/grades.lst");
-				return;
-			}
-		} catch (ParseException | IOException e) {
-			LOG.error(e.getMessage(), e);
-		}
+	public boolean hasGrades() throws IOException{
+		this.fetchCookie();
+		this.performLogin();
+		String htmlPage = this.fetchNotenPage(this.fetchPruefungenNotenspiegel());
+		this.performLogout();
+		return Parser.hasGrades(htmlPage);
 	}
 }
