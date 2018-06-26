@@ -26,7 +26,7 @@ public class BackgroundService {
         NotificationScheduler.setReminder(context, intervalMillis);
     }
 
-    private void disableNotifications() {
+    public void disableNotifications() {
         NotificationScheduler.cancelReminder(context);
     }
 

@@ -21,6 +21,7 @@ import me.steffenjacobs.fetchgrades.backgroundservice.BackgroundService;
 import me.steffenjacobs.fetchgrades.gradefetcher.GradeCalculator;
 import me.steffenjacobs.fetchgrades.gradefetcher.Module;
 import me.steffenjacobs.fetchgrades.login.LoginActivity;
+import me.steffenjacobs.fetchgrades.login.SettingsStorageService;
 import me.steffenjacobs.fetchgrades.settings.SettingsActivity;
 import me.steffenjacobs.fetchgrades.util.AndroidUtil;
 
@@ -29,6 +30,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
 
     public static final long INTERVAL_MILLIS = 60000;
     private BackgroundService bgService;
+    private SettingsStorageService settingsStorageService;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,6 +78,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_grade_display);
         // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        settingsStorageService = new SettingsStorageService(this);
         setupActionBar();
 
         final Bundle b = getIntent().getExtras();
@@ -86,7 +89,11 @@ public class GradeDisplayActivity extends AppCompatActivity {
         bgService = new BackgroundService(this, username, password);
         renderView(bgService.getModules());
 
-        bgService.enableNotifications(INTERVAL_MILLIS);
+        if (settingsStorageService.isBackgroundServiceEnabled()) {
+            bgService.enableNotifications(settingsStorageService.getBackgroundServiceInterval());
+        } else {
+            bgService.disableNotifications();
+        }
     }
 
     private void setupActionBar() {

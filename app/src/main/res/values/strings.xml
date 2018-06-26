@@ -18,4 +18,7 @@
 
     <string name="settings_invalid_interval">Interval must be an integer number</string>
     <string name="settings_interval_to_small">Interval must be bigger than 1 second</string>
+    <string name="settings_saved">Settings saved</string>
+    <string name="settings_discarded">Settings discarded</string>
+    <string name="credentials_cleared">Login Removed</string>
 </resources>

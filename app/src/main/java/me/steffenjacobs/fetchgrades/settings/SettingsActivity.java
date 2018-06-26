@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.gradedisplay.GradeDisplayActivity;
@@ -46,18 +47,23 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GradeDisplayActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Bundle b = new Bundle();
-        b.putBoolean("settings-changed", changed);
         final Bundle initial = getIntent().getExtras();
         b.putString("username", initial.getString("username"));
         b.putString("password", initial.getString("password"));
         intent.putExtras(b);
         startActivity(intent);
+        if (changed) {
+            Toast.makeText(SettingsActivity.this, getText(R.string.settings_saved), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(SettingsActivity.this, getText(R.string.settings_discarded), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void goToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        Toast.makeText(SettingsActivity.this, getText(R.string.credentials_cleared), Toast.LENGTH_SHORT).show();
     }
 
     private boolean persistSettings() {
