@@ -12,4 +12,6 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_grade_display">Grade Display</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
 </resources>
