@@ -49,6 +49,9 @@ public class GradeDisplayActivity extends AppCompatActivity {
             case android.R.id.home:
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle b = new Bundle();
+                b.putBoolean("logout-redirect", true);
+                intent.putExtras(b);
                 startActivity(intent);
                 break;
             default:

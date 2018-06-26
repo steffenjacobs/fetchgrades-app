@@ -80,14 +80,23 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        loadCredentials();
+        if (loadCredentials() && !isLogoutRedirect()) {
+            goToNextActivity();
+        }
     }
 
-    private void loadCredentials() {
+    private boolean isLogoutRedirect() {
+        final Bundle b = getIntent().getExtras();
+        return b != null && b.getBoolean("logout-redirect");
+    }
+
+    private boolean loadCredentials() {
         if (credentialStorageService.getUsername(this) != null) {
             mEmailView.setText(credentialStorageService.getUsername(this));
             mPasswordView.setText(credentialStorageService.getPassword(this));
+            return true;
         }
+        return false;
     }
 
     private void goToNextActivity() {
@@ -138,11 +147,11 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+        // Show a progress spinner, and kick off a background task to
+        // perform the user login attempt.
+        showProgress(true);
+        mAuthTask = new UserLoginTask(email, password);
+        mAuthTask.execute((Void) null);
     }
 
     /**
