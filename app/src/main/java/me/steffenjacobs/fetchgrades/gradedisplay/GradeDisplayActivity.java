@@ -26,9 +26,6 @@ import me.steffenjacobs.fetchgrades.settings.SettingsActivity;
 import me.steffenjacobs.fetchgrades.util.AndroidUtil;
 
 public class GradeDisplayActivity extends AppCompatActivity {
-
-
-    public static final long INTERVAL_MILLIS = 60000;
     private BackgroundService bgService;
     private SettingsStorageService settingsStorageService;
 
