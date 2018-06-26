@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import me.steffenjacobs.fetchgrades.R;
@@ -36,7 +37,16 @@ public class GradeDisplayActivity extends AppCompatActivity {
         rootLayout.addView(ReducedTableGenerator.getFullTableView(this, modules));
 
         TextView textView = new TextView(this);
-        textView.setText("Average: " + GradeCalculator.calculateAverage(modules));
+
+        double avg_grade = GradeCalculator.calculateAverage(modules);
+        DecimalFormat decim = new DecimalFormat("0.00");
+        avg_grade = Double.parseDouble(decim.format(avg_grade));
+
+
+        textView.setText("Average: " +  avg_grade);
+
+
+
         textView.setTypeface(null, Typeface.BOLD);
         textView.setGravity(Gravity.CENTER);
         textView.setPadding(0, 30, 0, 0);
