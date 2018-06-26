@@ -70,9 +70,6 @@ public class NotificationScheduler {
                 notificationService.showNotification(context, GradeDisplayActivity.class,
                         backgroundService.generateNewGradeMessage(m), "");
             }
-        } else {
-            notificationService.showNotification(context, GradeDisplayActivity.class,
-                    "No new grades.", "Sorry." + System.currentTimeMillis());
         }
     }
 }
