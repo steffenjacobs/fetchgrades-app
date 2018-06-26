@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fetchgrades</string>
+    <string name="app_name">Uni Mannheim Grades</string>
 
     <string name="login_activity_title">Uni Mannheim Login</string>
     <string name="login_prompt_email">Username</string>
