@@ -11,12 +11,9 @@ import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,9 +21,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.xml.transform.sax.SAXSource;
 
 import me.steffenjacobs.fetchgrades.gradedisplay.GradeDisplayActivity;
 import me.steffenjacobs.fetchgrades.R;
@@ -54,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(getString(R.string.login_activity_title));
         authenticatorService = new AuthenticatorService(this);
         credentialStorageService = new CredentialStorageService();
         setContentView(R.layout.activity_login);
@@ -120,13 +115,13 @@ public class LoginActivity extends AppCompatActivity {
         FetchGrades grades = new FetchGrades(mEmailView.getText().toString(), mPasswordView.getText().toString());
         try {
             if (!grades.hasGrades()) {
-                mEmailView.setError("Username or Password is incorrect or no grades available.");
-                mPasswordView.setError("Username or Password is incorrect or no grades available.");
+                mEmailView.setError(getString(R.string.login_incorrect_login));
+                mPasswordView.setError(getString(R.string.login_incorrect_login));
                 return;
             }
         } catch (IOException e) {
-            mEmailView.setError("Portal 2 service is currently unavailable.");
-            mPasswordView.setError("Portal 2 service is currently unavailable.");
+            mEmailView.setError(getString(R.string.login_service_unavailable));
+            mPasswordView.setError(getString(R.string.login_service_unavailable));
             e.printStackTrace();
             return;
         }
@@ -220,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError(getString(R.string.login_incorrect_login));
                 mPasswordView.requestFocus();
             }
         }

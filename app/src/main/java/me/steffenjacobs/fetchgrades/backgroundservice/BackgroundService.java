@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.gradedisplay.StorageService;
 import me.steffenjacobs.fetchgrades.gradefetcher.FetchGrades;
 import me.steffenjacobs.fetchgrades.gradefetcher.Module;
@@ -20,16 +21,16 @@ public class BackgroundService {
 
     private static final String FILE_NAME = "stored-modules.lst";
 
-    public void enableNotifications(long intervalMillis){
+    public void enableNotifications(long intervalMillis) {
         NotificationScheduler.setBackgroundService(this);
         NotificationScheduler.setReminder(context, intervalMillis);
     }
 
-    private void disableNotifications(){
+    private void disableNotifications() {
         NotificationScheduler.cancelReminder(context);
     }
 
-    public void refresh(){
+    public void refresh() {
         try {
             updateCache();
         } catch (IOException e) {
@@ -84,6 +85,6 @@ public class BackgroundService {
     }
 
     public String generateNewGradeMessage(Module m) {
-        return m.getGrade() + " in " + m.getModuleName() + " received!";
+        return String.format(context.getString(R.string.grade_received), "" + m.getGrade(), m.getModuleName());
     }
 }

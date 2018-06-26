@@ -41,7 +41,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
             case R.id.action_refresh:
                 bgService.refresh();
                 renderView(bgService.getModules());
-                Toast.makeText(this, "Refreshed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getText(R.string.grade_refreshed), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_settings:
                 Toast.makeText(this, "Settings selected", Toast.LENGTH_SHORT).show();
@@ -95,9 +95,8 @@ public class GradeDisplayActivity extends AppCompatActivity {
 
         double avg_grade = GradeCalculator.calculateAverage(modules);
         DecimalFormat decim = new DecimalFormat("0.00");
-        avg_grade = Double.parseDouble(decim.format(avg_grade));
 
-        textView.setText("Average: " + avg_grade);
+        textView.setText(String.format(getString(R.string.grade_average), decim.format(avg_grade)));
         textView.setTypeface(null, Typeface.BOLD);
         textView.setGravity(Gravity.CENTER);
         textView.setPadding(0, 30, 0, 0);

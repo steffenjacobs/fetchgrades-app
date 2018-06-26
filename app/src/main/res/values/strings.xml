@@ -1,17 +1,18 @@
 <resources>
     <string name="app_name">Fetchgrades</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Username</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign In</string>
-    <string name="save_login">Save Login</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This username is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="title_activity_grade_display">Grade Display</string>
+    <string name="login_activity_title">Uni Mannheim Login</string>
+    <string name="login_prompt_email">Username</string>
+    <string name="login_prompt_password">Password</string>
+    <string name="login_action_sign_in">Sign In</string>
+    <string name="login_save_login">Save Login</string>
+    <string name="login_incorrect_login">Username or Password is incorrect or no grades available.</string>
+    <string name="login_service_unavailable">Portal 2 service is currently unavailable.</string>
+
+    <string name="grade_activity_title">Grade Overview</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
+    <string name="grade_average">Average: %s</string>
+    <string name="grade_received">%s in %s received</string>
+    <string name="grade_refreshed">Refreshed Grades</string>
 </resources>
