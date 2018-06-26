@@ -2,6 +2,7 @@ package me.steffenjacobs.fetchgrades.gradefetcher;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Module {
 
@@ -104,5 +105,22 @@ public class Module {
         buf.append("Attempt: " + this.attempt + "\n");
         buf.append("-----------------------------------------------------------------------------------------------\n");
         return buf.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Module module = (Module) o;
+        return getExamNumber() == module.getExamNumber() &&
+                getRound() == module.getRound() &&
+                Double.compare(module.getGrade(), getGrade()) == 0 &&
+                getAttempt() == module.getAttempt() &&
+                Objects.equals(getModuleName(), module.getModuleName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getExamNumber(), getRound(), getModuleName(), getGrade(), getAttempt());
     }
 }

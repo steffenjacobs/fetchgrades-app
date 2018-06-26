@@ -107,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
+        //TODO: move to background service
         FetchGrades grades = new FetchGrades(mEmailView.getText().toString(), mPasswordView.getText().toString());
         try {
             if (!grades.hasGrades()) {

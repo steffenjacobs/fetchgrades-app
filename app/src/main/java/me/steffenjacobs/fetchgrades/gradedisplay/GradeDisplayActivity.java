@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 import me.steffenjacobs.fetchgrades.R;
+import me.steffenjacobs.fetchgrades.backgroundservice.BackgroundService;
 import me.steffenjacobs.fetchgrades.gradefetcher.FetchGrades;
 import me.steffenjacobs.fetchgrades.gradefetcher.GradeCalculator;
 import me.steffenjacobs.fetchgrades.gradefetcher.Module;
@@ -27,20 +28,35 @@ public class GradeDisplayActivity extends AppCompatActivity {
         String username = b.getString("username");
         String password = b.getString("password");
 
-        FetchGrades grades = new FetchGrades(username, password);
-        try {
-            List<Module> modules = grades.fetchGrades();
-            LinearLayout rootLayout = (LinearLayout) findViewById(R.id.rootLayout);
-            rootLayout.addView(ReducedTableGenerator.getFullTableView(this, modules));
+        BackgroundService bgService = new BackgroundService(this, username, password);
+        List<Module> modules = bgService.getModules();
 
-            TextView textView = new TextView(this);
-            textView.setText("Average: " + GradeCalculator.calculateAverage(modules));
-            textView.setTypeface(null, Typeface.BOLD);
-            textView.setGravity(Gravity.CENTER);
-            textView.setPadding(0, 30, 0, 0);
-            rootLayout.addView(textView);
-        } catch (IOException e) {
-            e.printStackTrace();
+        LinearLayout rootLayout = (LinearLayout) findViewById(R.id.rootLayout);
+        rootLayout.addView(ReducedTableGenerator.getFullTableView(this, modules));
+
+        TextView textView = new TextView(this);
+        textView.setText("Average: " + GradeCalculator.calculateAverage(modules));
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setGravity(Gravity.CENTER);
+        textView.setPadding(0, 30, 0, 0);
+        rootLayout.addView(textView);
+
+        if (bgService.hasNewGrades()) {
+            String text = "New grades available!\n";
+            for (Module m : bgService.getNewGrades()) {
+                text += generateNewGradeMessage(m) + "\n";
+            }
+            TextView textView2 = new TextView(this);
+            textView2.setText(text);
+            textView2.setTypeface(null, Typeface.BOLD);
+            textView2.setGravity(Gravity.CENTER);
+            textView2.setPadding(0, 30, 0, 0);
+            rootLayout.addView(textView2);
+            bgService.updateStorage(modules);
         }
+    }
+
+    private String generateNewGradeMessage(Module m) {
+        return m.getGrade() + " in " + m.getModuleName() + " received!";
     }
 }
