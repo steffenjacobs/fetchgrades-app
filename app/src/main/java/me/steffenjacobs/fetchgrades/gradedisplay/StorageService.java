@@ -3,9 +3,6 @@ package me.steffenjacobs.fetchgrades.gradedisplay;
 import android.content.Context;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
@@ -61,7 +58,7 @@ public class StorageService {
             try {
                 modules.add(parseModule(record));
             } catch (NumberFormatException | ParseException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error(e.getMessage());
             }
         }
         return modules;

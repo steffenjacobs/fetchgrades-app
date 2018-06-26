@@ -7,16 +7,17 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.List;
 
 import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.backgroundservice.BackgroundService;
-import me.steffenjacobs.fetchgrades.gradefetcher.FetchGrades;
 import me.steffenjacobs.fetchgrades.gradefetcher.GradeCalculator;
 import me.steffenjacobs.fetchgrades.gradefetcher.Module;
 
 public class GradeDisplayActivity extends AppCompatActivity {
+
+
+    public static final long INTERVAL_MILLIS = 60000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
         if (bgService.hasNewGrades()) {
             String text = "New grades available!\n";
             for (Module m : bgService.getNewGrades()) {
-                text += generateNewGradeMessage(m) + "\n";
+                text += bgService.generateNewGradeMessage(m) + "\n";
             }
             TextView textView2 = new TextView(this);
             textView2.setText(text);
@@ -54,9 +55,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
             rootLayout.addView(textView2);
             bgService.updateStorage(modules);
         }
-    }
 
-    private String generateNewGradeMessage(Module m) {
-        return m.getGrade() + " in " + m.getModuleName() + " received!";
+        bgService.enableNotifications(INTERVAL_MILLIS);
     }
 }

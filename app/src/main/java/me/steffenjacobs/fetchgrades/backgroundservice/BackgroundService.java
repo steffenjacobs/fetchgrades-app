@@ -20,6 +20,23 @@ public class BackgroundService {
 
     private static final String FILE_NAME = "stored-modules.lst";
 
+    public void enableNotifications(long intervalMillis){
+        NotificationScheduler.setBackgroundService(this);
+        NotificationScheduler.setReminder(context, intervalMillis);
+    }
+
+    private void disableNotifications(){
+        NotificationScheduler.cancelReminder(context);
+    }
+
+    public void refresh(){
+        try {
+            updateCache();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Module> getModules() {
         if (cacheDownloadedModules == null) {
             try {
@@ -48,7 +65,6 @@ public class BackgroundService {
     }
 
     public boolean hasNewGrades() {
-        System.out.println(cacheStoredModules.size() + " - " + getModules().size());
         return cacheStoredModules.size() != getModules().size();
     }
 
@@ -65,5 +81,9 @@ public class BackgroundService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String generateNewGradeMessage(Module m) {
+        return m.getGrade() + " in " + m.getModuleName() + " received!";
     }
 }
