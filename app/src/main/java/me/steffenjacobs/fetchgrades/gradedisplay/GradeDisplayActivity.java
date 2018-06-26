@@ -21,6 +21,8 @@ import me.steffenjacobs.fetchgrades.backgroundservice.BackgroundService;
 import me.steffenjacobs.fetchgrades.gradefetcher.GradeCalculator;
 import me.steffenjacobs.fetchgrades.gradefetcher.Module;
 import me.steffenjacobs.fetchgrades.login.LoginActivity;
+import me.steffenjacobs.fetchgrades.settings.SettingsActivity;
+import me.steffenjacobs.fetchgrades.util.AndroidUtil;
 
 public class GradeDisplayActivity extends AppCompatActivity {
 
@@ -44,15 +46,22 @@ public class GradeDisplayActivity extends AppCompatActivity {
                 Toast.makeText(this, getText(R.string.grade_refreshed), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_settings:
-                Toast.makeText(this, "Settings selected", Toast.LENGTH_SHORT).show();
-                break;
-            case android.R.id.home:
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, SettingsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                final Bundle initial = getIntent().getExtras();
                 Bundle b = new Bundle();
-                b.putBoolean("logout-redirect", true);
+                b.putString("username", initial.getString("username"));
+                b.putString("password", initial.getString("password"));
                 intent.putExtras(b);
                 startActivity(intent);
+                break;
+            case android.R.id.home:
+                Intent intent2 = new Intent(this, LoginActivity.class);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle b2 = new Bundle();
+                b2.putBoolean("logout-redirect", true);
+                intent2.putExtras(b2);
+                startActivity(intent2);
                 break;
             default:
                 break;
@@ -73,6 +82,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
         final String username = b.getString("username");
         final String password = b.getString("password");
 
+        AndroidUtil.allowNetworkOnMainThread();
         bgService = new BackgroundService(this, username, password);
         renderView(bgService.getModules());
 

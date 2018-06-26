@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -25,6 +24,7 @@ import java.io.IOException;
 import me.steffenjacobs.fetchgrades.gradedisplay.GradeDisplayActivity;
 import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.gradefetcher.FetchGrades;
+import me.steffenjacobs.fetchgrades.util.AndroidUtil;
 
 /**
  * A login screen that offers login via email/password.
@@ -43,14 +43,14 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
 
     private AuthenticatorService authenticatorService;
-    private CredentialStorageService credentialStorageService;
+    private SettingsStorageService settingsStorageService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTitle(getString(R.string.login_activity_title));
         authenticatorService = new AuthenticatorService(this);
-        credentialStorageService = new CredentialStorageService();
+        settingsStorageService = new SettingsStorageService(this);
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -86,9 +86,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean loadCredentials() {
-        if (credentialStorageService.getUsername(this) != null) {
-            mEmailView.setText(credentialStorageService.getUsername(this));
-            mPasswordView.setText(credentialStorageService.getPassword(this));
+        if (settingsStorageService.getUsername() != null) {
+            mEmailView.setText(settingsStorageService.getUsername());
+            mPasswordView.setText(settingsStorageService.getPassword());
             return true;
         }
         return false;
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
     private void goToNextActivity() {
 
         if (((CheckBox) findViewById(R.id.checkbox_save_login)).isChecked()) {
-            credentialStorageService.saveCredentials(this, mEmailView.getText().toString(), mPasswordView.getText().toString());
+            settingsStorageService.saveCredentials(mEmailView.getText().toString(), mPasswordView.getText().toString());
         }
 
         /*String cipher = authenticatorService.encryptString("Test");
@@ -106,10 +106,7 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("Plain-Back: " + plain_back);*/
 
         //enable network activity in main thread
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+        AndroidUtil.allowNetworkOnMainThread();
 
         //TODO: move to background service
         FetchGrades grades = new FetchGrades(mEmailView.getText().toString(), mPasswordView.getText().toString());
