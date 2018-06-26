@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -103,7 +104,9 @@ public class GradeDisplayActivity extends AppCompatActivity {
     private void renderView(List<Module> modules) {
         LinearLayout rootLayout = (LinearLayout) findViewById(R.id.rootLayout);
         rootLayout.removeAllViews();
-        rootLayout.addView(ReducedTableGenerator.getFullTableView(this, modules));
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        rootLayout.addView(ReducedTableGenerator.getFullTableView(this, modules, metrics.widthPixels));
 
         TextView textView = new TextView(this);
 
@@ -115,6 +118,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
         textView.setGravity(Gravity.CENTER);
         textView.setPadding(0, 30, 0, 0);
         rootLayout.addView(textView);
+        rootLayout.invalidate();
 
         if (bgService.hasNewGrades()) {
             String text = "New grades available!\n";
