@@ -60,11 +60,22 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void persistSettings() {
+    private boolean persistSettings() {
         final Switch backgroundSwitch = (Switch) findViewById(R.id.switchBackground);
         settingsStorageService.saveBackgroundServiceEnabled(backgroundSwitch.isChecked());
         final TextView textBackgroundInterval = (TextView) findViewById(R.id.textBackgroundInterval);
-        settingsStorageService.saveBackgroundServiceInterval(Long.parseLong(textBackgroundInterval.getText().toString()));
+        try {
+            long interval = Long.parseLong(textBackgroundInterval.getText().toString());
+            if (interval < 1) {
+                textBackgroundInterval.setError(getString(R.string.settings_interval_to_small));
+                return false;
+            }
+            settingsStorageService.saveBackgroundServiceInterval(interval * 1000);
+        } catch (NumberFormatException e) {
+            textBackgroundInterval.setError(getString(R.string.settings_invalid_interval));
+            return false;
+        }
+        return true;
 
     }
 
@@ -81,8 +92,9 @@ public class SettingsActivity extends AppCompatActivity {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                persistSettings();
-                goToGradeOverview(true);
+                if (persistSettings()) {
+                    goToGradeOverview(true);
+                }
             }
         });
 
@@ -96,7 +108,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         final TextView textBackgroundInterval = (TextView) findViewById(R.id.textBackgroundInterval);
-        textBackgroundInterval.setText("" + settingsStorageService.getBackgroundServiceInterval());
+        textBackgroundInterval.setText("" + (settingsStorageService.getBackgroundServiceInterval() / 1000));
 
         final Switch backgroundSwitch = (Switch) findViewById(R.id.switchBackground);
         backgroundSwitch.setChecked(settingsStorageService.isBackgroundServiceEnabled());

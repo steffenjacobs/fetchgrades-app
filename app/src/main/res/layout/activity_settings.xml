@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="time"
-            android:text="Background Service Interval" />
+            android:text="Background Service Interval (s)" />
 
         <Button
             android:id="@+id/buttonClearCredentials"

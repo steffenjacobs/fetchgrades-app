@@ -15,4 +15,7 @@
     <string name="grade_average">Average: %s</string>
     <string name="grade_received">%s in %s received</string>
     <string name="grade_refreshed">Refreshed Grades</string>
+
+    <string name="settings_invalid_interval">Interval must be an integer number</string>
+    <string name="settings_interval_to_small">Interval must be bigger than 1 second</string>
 </resources>
