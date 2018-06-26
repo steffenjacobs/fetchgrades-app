@@ -53,11 +53,11 @@ public class SettingsStorageService {
 
     public boolean isBackgroundServiceEnabled() {
         SharedPreferences prefs = context.getSharedPreferences(SETTINGS, MODE_PRIVATE);
-        return prefs.getBoolean("backgroundservice-enabled", false);
+        return prefs.getBoolean("backgroundservice-enabled", true);
     }
 
     public long getBackgroundServiceInterval() {
         SharedPreferences prefs = context.getSharedPreferences(SETTINGS, MODE_PRIVATE);
-        return prefs.getLong("backgroundservice-interval", 360000);
+        return prefs.getLong("backgroundservice-interval", 1800000);
     }
 }
