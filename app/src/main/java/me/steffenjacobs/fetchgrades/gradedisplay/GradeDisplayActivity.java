@@ -26,6 +26,7 @@ public class GradeDisplayActivity extends AppCompatActivity {
 
 
     public static final long INTERVAL_MILLIS = 60000;
+    private BackgroundService bgService;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -37,15 +38,13 @@ public class GradeDisplayActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // action with ID action_refresh was selected
             case R.id.action_refresh:
-                Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
-                        .show();
+                bgService.refresh();
+                renderView(bgService.getModules());
+                Toast.makeText(this, "Refreshed", Toast.LENGTH_SHORT).show();
                 break;
-            // action with ID action_settings was selected
             case R.id.action_settings:
-                Toast.makeText(this, "Settings selected", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(this, "Settings selected", Toast.LENGTH_SHORT).show();
                 break;
             case android.R.id.home:
                 Intent intent = new Intent(this, LoginActivity.class);
@@ -65,19 +64,28 @@ public class GradeDisplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_grade_display);
         // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        setupActionBar();
+
+        final Bundle b = getIntent().getExtras();
+        final String username = b.getString("username");
+        final String password = b.getString("password");
+
+        bgService = new BackgroundService(this, username, password);
+        renderView(bgService.getModules());
+
+        bgService.enableNotifications(INTERVAL_MILLIS);
+    }
+
+    private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
 
-        final Bundle b = getIntent().getExtras();
-        String username = b.getString("username");
-        String password = b.getString("password");
-
-        BackgroundService bgService = new BackgroundService(this, username, password);
-        List<Module> modules = bgService.getModules();
-
+    private void renderView(List<Module> modules) {
         LinearLayout rootLayout = (LinearLayout) findViewById(R.id.rootLayout);
+        rootLayout.removeAllViews();
         rootLayout.addView(ReducedTableGenerator.getFullTableView(this, modules));
 
         TextView textView = new TextView(this);
@@ -105,7 +113,5 @@ public class GradeDisplayActivity extends AppCompatActivity {
             rootLayout.addView(textView2);
             bgService.updateStorage(modules);
         }
-
-        bgService.enableNotifications(INTERVAL_MILLIS);
     }
 }
