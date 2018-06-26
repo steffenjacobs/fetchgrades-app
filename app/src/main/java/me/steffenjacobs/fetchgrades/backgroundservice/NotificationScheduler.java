@@ -6,10 +6,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
 import java.util.List;
 
 import me.steffenjacobs.fetchgrades.gradedisplay.GradeDisplayActivity;
+import me.steffenjacobs.fetchgrades.gradedisplay.StorageService;
 import me.steffenjacobs.fetchgrades.gradefetcher.Module;
+import me.steffenjacobs.fetchgrades.login.SettingsStorageService;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -55,18 +58,21 @@ public class NotificationScheduler {
     }
 
     public static void onReceive(Context context) {
-        if (backgroundService != null) {
-            backgroundService.refresh();
-            if (backgroundService.hasNewGrades()) {
-                List<Module> modules = backgroundService.getNewGrades();
-                for (Module m : modules) {
-                    notificationService.showNotification(context, GradeDisplayActivity.class,
-                            backgroundService.generateNewGradeMessage(m), "");
-                }
-            } else {
+        if (backgroundService == null) {
+            SettingsStorageService settingsStorageService = new SettingsStorageService(context);
+            backgroundService = new BackgroundService(context, settingsStorageService.getUsername(), settingsStorageService.getPassword());
+        }
+
+        backgroundService.refresh();
+        if (backgroundService.hasNewGrades()) {
+            List<Module> modules = backgroundService.getNewGrades();
+            for (Module m : modules) {
                 notificationService.showNotification(context, GradeDisplayActivity.class,
-                        "No new grades.", "Sorry." + System.currentTimeMillis());
+                        backgroundService.generateNewGradeMessage(m), "");
             }
+        } else {
+            notificationService.showNotification(context, GradeDisplayActivity.class,
+                    "No new grades.", "Sorry." + System.currentTimeMillis());
         }
     }
 }
