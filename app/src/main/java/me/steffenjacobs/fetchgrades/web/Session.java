@@ -107,7 +107,7 @@ public class Session {
 	}
 	
 	
-	public static List<Module> fetchGrades() throws IOException {		
+	public static List<me.steffenjacobs.fetchgrades.web.Module> fetchGrades() throws IOException {
 		if(! isStillLoggedIn()) {		
 			boolean success = Session.performLogin(Session.username, Session.password);
 			if(!success)

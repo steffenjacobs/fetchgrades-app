@@ -19,8 +19,8 @@ import java.util.List;
 
 import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.backgroundservice.BackgroundService;
-import me.steffenjacobs.fetchgrades.gradefetcher.GradeCalculator;
-import me.steffenjacobs.fetchgrades.gradefetcher.Module;
+import me.steffenjacobs.fetchgrades.web.GradeCalculator;
+import me.steffenjacobs.fetchgrades.web.Module;
 import me.steffenjacobs.fetchgrades.login.LoginActivity;
 import me.steffenjacobs.fetchgrades.login.SettingsStorageService;
 import me.steffenjacobs.fetchgrades.settings.SettingsActivity;

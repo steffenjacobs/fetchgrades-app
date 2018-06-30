@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import me.steffenjacobs.fetchgrades.gradefetcher.Module;
+import me.steffenjacobs.fetchgrades.web.Module;
 
 public class ReducedTableGenerator {
 

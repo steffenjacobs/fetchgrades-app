@@ -18,7 +18,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import me.steffenjacobs.fetchgrades.gradefetcher.Module;
+import me.steffenjacobs.fetchgrades.web.Module;
 
 /**
  * @author Steffen Jacobs

@@ -11,8 +11,8 @@ import java.util.List;
 
 import me.steffenjacobs.fetchgrades.gradedisplay.GradeDisplayActivity;
 import me.steffenjacobs.fetchgrades.gradedisplay.StorageService;
-import me.steffenjacobs.fetchgrades.gradefetcher.Module;
 import me.steffenjacobs.fetchgrades.login.SettingsStorageService;
+import me.steffenjacobs.fetchgrades.web.Module;
 
 import static android.content.Context.ALARM_SERVICE;
 

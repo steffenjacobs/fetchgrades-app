@@ -23,8 +23,8 @@ import java.io.IOException;
 
 import me.steffenjacobs.fetchgrades.gradedisplay.GradeDisplayActivity;
 import me.steffenjacobs.fetchgrades.R;
-import me.steffenjacobs.fetchgrades.gradefetcher.FetchGrades;
 import me.steffenjacobs.fetchgrades.util.AndroidUtil;
+import me.steffenjacobs.fetchgrades.web.Session;
 
 /**
  * A login screen that offers login via email/password.
@@ -108,14 +108,20 @@ public class LoginActivity extends AppCompatActivity {
         //enable network activity in main thread
         AndroidUtil.allowNetworkOnMainThread();
 
-        //TODO: move to background service
-        FetchGrades grades = new FetchGrades(mEmailView.getText().toString(), mPasswordView.getText().toString());
+        //TODO: move to background servic
         try {
-            if (!grades.hasGrades()) {
+
+            boolean successLogin = Session.performLogin(mEmailView.getText().toString(), mPasswordView.getText().toString());
+
+            if(!successLogin){
                 mEmailView.setError(getString(R.string.login_incorrect_login));
                 mPasswordView.setError(getString(R.string.login_incorrect_login));
                 return;
+            }else{
+                //Session.fetchGrades();
             }
+
+
         } catch (IOException e) {
             mEmailView.setError(getString(R.string.login_service_unavailable));
             mPasswordView.setError(getString(R.string.login_service_unavailable));

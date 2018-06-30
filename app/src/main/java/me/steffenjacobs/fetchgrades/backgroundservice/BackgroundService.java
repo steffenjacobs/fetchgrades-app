@@ -9,8 +9,8 @@ import java.util.List;
 
 import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.gradedisplay.StorageService;
-import me.steffenjacobs.fetchgrades.gradefetcher.FetchGrades;
-import me.steffenjacobs.fetchgrades.gradefetcher.Module;
+import me.steffenjacobs.fetchgrades.web.Module;
+import me.steffenjacobs.fetchgrades.web.Session;
 
 public class BackgroundService {
     private final StorageService storageService;
@@ -50,7 +50,10 @@ public class BackgroundService {
     }
 
     private void updateCache() throws IOException {
-        cacheDownloadedModules = new FetchGrades(username, password).fetchGrades();
+        if(Session.performLogin(username, password)){
+            cacheDownloadedModules = Session.fetchGrades();
+        }
+
         try {
             cacheStoredModules = storageService.load(FILE_NAME, context);
         } catch (FileNotFoundException e) {
