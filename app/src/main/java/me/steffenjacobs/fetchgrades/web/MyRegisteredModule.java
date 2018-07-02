@@ -17,7 +17,23 @@ public class MyRegisteredModule {
 	private String examTime;
 	private String seat;
 	private String room;
-	
+
+	public MyRegisteredModule(int examNr, String moduleName, String examiner, String examType, String semester, Date examDate, int round, String examTime, String seat, String room) {
+		this.examNr = examNr;
+		this.moduleName = moduleName;
+		this.examiner = examiner;
+		this.examType = examType;
+		this.semester = semester;
+		this.examDate = examDate;
+		this.round = round;
+		this.examTime = examTime;
+		this.seat = seat;
+		this.room = room;
+	}
+
+    public MyRegisteredModule(){
+
+    }
 
 	public int getExamNr() {
 		return examNr;

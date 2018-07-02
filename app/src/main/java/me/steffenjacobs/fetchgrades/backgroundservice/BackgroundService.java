@@ -10,7 +10,9 @@ import java.util.List;
 import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.gradedisplay.StorageService;
 import me.steffenjacobs.fetchgrades.web.Module;
+import me.steffenjacobs.fetchgrades.web.MyRegisteredModule;
 import me.steffenjacobs.fetchgrades.web.Session;
+import me.steffenjacobs.fetchgrades.web.User;
 
 public class BackgroundService {
     private final StorageService storageService;
@@ -18,8 +20,12 @@ public class BackgroundService {
     private final String username, password;
 
     private List<Module> cacheDownloadedModules, cacheStoredModules;
+    private List<MyRegisteredModule> cacheDownloadedMyRegisteredModules, cacheStoredMyRegisteredModules;
 
-    private static final String FILE_NAME = "stored-modules.lst";
+    private User user;
+
+    private static final String FILE_NAME_MODULES = "stored-modules.lst";
+    private static final String FILE_NAME_MYREGISTEREDMODULES = "stored-registered-modules.lst";
 
     public void enableNotifications(long intervalMillis) {
         NotificationScheduler.setBackgroundService(this);
@@ -49,15 +55,31 @@ public class BackgroundService {
         return cacheDownloadedModules;
     }
 
+    public List<MyRegisteredModule> getMyRegisteredModules(){
+        if(cacheDownloadedMyRegisteredModules == null){
+            try{
+                updateCache();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+        return cacheDownloadedMyRegisteredModules;
+    }
+
     private void updateCache() throws IOException {
         if(Session.performLogin(username, password)){
             cacheDownloadedModules = Session.fetchGrades();
+            Object[] data = Session.fetchMyRegisteredModules();
+            this.user = (User) data[0];
+            cacheDownloadedMyRegisteredModules = (List<MyRegisteredModule>) data[1];
         }
 
         try {
-            cacheStoredModules = storageService.load(FILE_NAME, context);
+            cacheStoredModules = storageService.loadModules(FILE_NAME_MODULES, context);
+            cacheStoredMyRegisteredModules = storageService.loadMyRegisteredModules(FILE_NAME_MYREGISTEREDMODULES, context);
         } catch (FileNotFoundException e) {
             cacheStoredModules = new ArrayList<>();
+            cacheStoredMyRegisteredModules = new ArrayList<>();
         }
     }
 
@@ -72,6 +94,10 @@ public class BackgroundService {
         return cacheStoredModules.size() != getModules().size();
     }
 
+    public boolean hasNewRegisteredModules(){
+        return cacheStoredMyRegisteredModules.size() != getMyRegisteredModules().size();
+    }
+
     public List<Module> getNewGrades() {
         List<Module> result = new ArrayList<>();
         result.addAll(getModules());
@@ -79,9 +105,24 @@ public class BackgroundService {
         return result;
     }
 
-    public void updateStorage(List<Module> updatedList) {
+    public List<MyRegisteredModule> getNewMyRegisteredModules(){
+        List<MyRegisteredModule> result = new ArrayList<>();
+        result.addAll(getMyRegisteredModules());
+        result.removeAll(cacheStoredMyRegisteredModules);
+        return result;
+    }
+
+    public void updateModuleStorage(List<Module> updatedList) {
         try {
-            storageService.store(updatedList, FILE_NAME, context);
+            storageService.storeModules(updatedList, FILE_NAME_MODULES, context);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateMyRegisteredModulesStorage(List<MyRegisteredModule> updatedList){
+        try {
+            storageService.storeMyRegisteredModules(updatedList, FILE_NAME_MYREGISTEREDMODULES, context);
         } catch (IOException e) {
             e.printStackTrace();
         }

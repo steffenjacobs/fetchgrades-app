@@ -131,7 +131,9 @@ public class GradeDisplayActivity extends AppCompatActivity {
             textView2.setGravity(Gravity.CENTER);
             textView2.setPadding(0, 30, 0, 0);
             rootLayout.addView(textView2);
-            bgService.updateStorage(modules);
+            bgService.updateModuleStorage(modules);
         }
+
+
     }
 }
