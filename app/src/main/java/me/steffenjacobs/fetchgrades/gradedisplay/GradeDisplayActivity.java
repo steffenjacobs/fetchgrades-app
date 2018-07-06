@@ -2,6 +2,7 @@ package me.steffenjacobs.fetchgrades.gradedisplay;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -22,6 +23,7 @@ import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import me.steffenjacobs.fetchgrades.R;
 import me.steffenjacobs.fetchgrades.backgroundservice.BackgroundService;
 import me.steffenjacobs.fetchgrades.web.GradeCalculator;
@@ -56,16 +58,24 @@ public class GradeDisplayActivity extends AppCompatActivity {
         bgService = new BackgroundService(this, username, password);
         List<Module> list = bgService.getModules();
 
-
         TableView<String[]> tableView = (TableView<String[]>) findViewById(R.id.tableView);
         CustomTableDataAdapter customTableDataAdapter = new CustomTableDataAdapter(this, list);
         tableView.setDataAdapter(customTableDataAdapter);
-        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(this, new String[]{"Module name", "ECTS", "Grade"} ));
+        CustomHeaderDataAdapter customHeaderDataAdapter = new CustomHeaderDataAdapter(this);
+        tableView.setHeaderAdapter( customHeaderDataAdapter);
 
-        TableColumnWeightModel columnModel = new TableColumnWeightModel(3);
+
+     /*   int colorEvenRows = getResources().getColor(R.color.colorAccent);
+        int colorOddRows = getResources().getColor(R.color.colorPrimaryDark);
+        tableView.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(colorEvenRows, colorOddRows));
+*/
+
+
+        TableColumnWeightModel columnModel = new TableColumnWeightModel(4);
         columnModel.setColumnWeight(0, 3);
         columnModel.setColumnWeight(1, 1);
         columnModel.setColumnWeight(2, 1);
+        columnModel.setColumnWeight(3, 1);
         tableView.setColumnModel(columnModel);
 
         /*
@@ -88,4 +98,5 @@ public class GradeDisplayActivity extends AppCompatActivity {
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
+
 }

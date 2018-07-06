@@ -35,5 +35,5 @@ dependencies {
     implementation 'cz.msebera.android:httpclient:4.4.1.1'
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
-    compile 'de.codecrafters.tableview:tableview:2.8.0'
+    implementation 'de.codecrafters.tableview:tableview:2.8.0'
 }

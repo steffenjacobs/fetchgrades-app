@@ -1,8 +1,6 @@
 package me.steffenjacobs.fetchgrades.gradedisplay;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -10,58 +8,53 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
-import de.codecrafters.tableview.TableDataAdapter;
-import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
+import de.codecrafters.tableview.TableHeaderAdapter;
 import me.steffenjacobs.fetchgrades.web.Module;
 
-public class CustomTableDataAdapter extends TableDataAdapter {
+public class CustomHeaderDataAdapter extends TableHeaderAdapter {
 
-    public CustomTableDataAdapter(Context context, List data) {
-        super(context, data);
+    public CustomHeaderDataAdapter(Context context) {
+        super(context);
     }
 
-
     @Override
-    public View getCellView(int rowIndex, int columnIndex, ViewGroup parentView) {
-        Module module = (Module) getRowData(rowIndex);
+    public View getHeaderView(int columnIndex, ViewGroup parentView) {
         TextView renderedView = null;
 
         switch (columnIndex) {
             case 0:
                 renderedView = new TextView(this.getContext());
                 renderedView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                renderedView.setText(module.getModuleName());
+                renderedView.setText("Module name");
                 renderedView.setTypeface(null, Typeface.BOLD);
-                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
                 renderedView.setPadding(10, 10, 0, 10);
                 break;
             case 1:
                 renderedView = new TextView(this.getContext());
                 renderedView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                renderedView.setText(module.getEcts() + "");
+                renderedView.setText("ECTS");
                 renderedView.setTypeface(null, Typeface.BOLD);
-                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
                 renderedView.setGravity(Gravity.CENTER);
                 renderedView.setPadding(10, 10, 0, 10);
                 break;
             case 2:
                 renderedView = new TextView(this.getContext());
                 renderedView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                renderedView.setText(module.getGrade() + "");
+                renderedView.setText("Grade");
                 renderedView.setTypeface(null, Typeface.BOLD);
                 renderedView.setGravity(Gravity.CENTER);
-                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
                 renderedView.setPadding(10, 10, 0, 10);
                 break;
             case 3:
                 renderedView = new TextView(this.getContext());
                 renderedView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                renderedView.setText(module.isPassed() ? "✔" : "✘");
+                renderedView.setText( "Passed" );
                 renderedView.setTypeface(null, Typeface.BOLD);
                 renderedView.setGravity(Gravity.CENTER);
-                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+                renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
                 renderedView.setPadding(10, 10, 0, 10);
         }
 
