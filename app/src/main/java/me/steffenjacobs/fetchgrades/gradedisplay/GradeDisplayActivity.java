@@ -45,19 +45,39 @@ public class GradeDisplayActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_grade_display);
-        setupActionBar();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                bgService.refresh();
+                refreshTable(bgService.getModules());
+                Toast.makeText(this, getText(R.string.grade_refreshed), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                final Bundle initial = getIntent().getExtras();
+                Bundle b = new Bundle();
+                b.putString("username", initial.getString("username"));
+                b.putString("password", initial.getString("password"));
+                intent.putExtras(b);
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                Intent intent2 = new Intent(this, LoginActivity.class);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle b2 = new Bundle();
+                b2.putBoolean("logout-redirect", true);
+                intent2.putExtras(b2);
+                startActivity(intent2);
+                break;
+            default:
+                break;
+        }
 
-        final Bundle b = getIntent().getExtras();
-        final String username = b.getString("username");
-        final String password = b.getString("password");
+        return true;
+    }
 
-        AndroidUtil.allowNetworkOnMainThread();
-        bgService = new BackgroundService(this, username, password);
-        List<Module> list = bgService.getModules();
-
+    private void refreshTable(List<Module> list){
         TableView<String[]> tableView = (TableView<String[]>) findViewById(R.id.tableView);
         CustomTableDataAdapter customTableDataAdapter = new CustomTableDataAdapter(this, list);
         tableView.setDataAdapter(customTableDataAdapter);
@@ -77,6 +97,23 @@ public class GradeDisplayActivity extends AppCompatActivity {
         columnModel.setColumnWeight(2, 1);
         columnModel.setColumnWeight(3, 1);
         tableView.setColumnModel(columnModel);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_grade_display);
+        setupActionBar();
+
+        final Bundle b = getIntent().getExtras();
+        final String username = b.getString("username");
+        final String password = b.getString("password");
+
+        AndroidUtil.allowNetworkOnMainThread();
+        bgService = new BackgroundService(this, username, password);
+        List<Module> list = bgService.getModules();
+        refreshTable(list);
+
 
         /*
         LinearLayout rootLayout = (LinearLayout) findViewById(R.id.rootLayout);
