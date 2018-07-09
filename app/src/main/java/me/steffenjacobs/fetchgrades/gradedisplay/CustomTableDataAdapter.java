@@ -60,6 +60,13 @@ public class CustomTableDataAdapter extends TableDataAdapter {
                 renderedView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 renderedView.setText(module.isPassed() ? "✔" : "✘");
                 renderedView.setTypeface(null, Typeface.BOLD);
+                if (module.isPassed()) {
+                    renderedView.setText("✔");
+                    renderedView.setTextColor(Color.rgb(0x1e, 0x66, 0x45));
+                } else {
+                    renderedView.setText("✘");
+                    renderedView.setTextColor(Color.rgb(0x66, 0x1d, 0x1d));
+                }
                 renderedView.setGravity(Gravity.CENTER);
                 renderedView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
                 renderedView.setPadding(10, 10, 0, 10);
